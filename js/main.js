@@ -16,7 +16,7 @@ var getRandomNumber = function (param1, param2) {
 };
 
 //  функция добавляет в массив генерируемый объект объявление и клонирует его
-var createAdvert = function (types, quantity, advertsArr) {
+var createAdvert = function (types, quantity) {
 
   for (var i = 0; i < quantity; i++) {
     adverts.push({
@@ -33,16 +33,18 @@ var createAdvert = function (types, quantity, advertsArr) {
     });
 
     //  клонирование и добавление в DOM
-    var pinElement = pinTemplate.cloneNode(true);
-    pinElement.style = 'left:' + (advertsArr[i].location.x + PIN_COORDINATE) + 'px;' + 'top:' + (advertsArr[i].location.y + PIN_COORDINATE) + 'px';
-    var srcAttribute = pinElement.getElementsByTagName('img')[0];
-    srcAttribute.src = advertsArr[i].author.avatar;
-    var altAttribute = pinElement.getElementsByTagName('img')[0];
-    altAttribute.alt = advertsArr[i].offer.type;
-    fragment.appendChild(pinElement);
-    mapPins.appendChild(fragment);
+    var showPin = function (advertsArr) {
+      var pinElement = pinTemplate.cloneNode(true);
+      pinElement.style = 'left:' + (advertsArr[i].location.x + PIN_COORDINATE) + 'px;' + 'top:' + (advertsArr[i].location.y + PIN_COORDINATE) + 'px';
+      var srcAttribute = pinElement.getElementsByTagName('img')[0];
+      srcAttribute.src = advertsArr[i].author.avatar;
+      var altAttribute = pinElement.getElementsByTagName('img')[0];
+      altAttribute.alt = advertsArr[i].offer.type;
+      fragment.appendChild(pinElement);
+      mapPins.appendChild(fragment);
+    };
+    showPin(adverts);
   }
-
 };
-
 createAdvert(typeList, ADVERTS_NUMBER, adverts);
+
