@@ -2,7 +2,7 @@
 
 var ADVERTS_NUMBER = 8;
 var PIN_COORDINATE_X = 25;
-var PIN_COORDINATE_Y = 35;
+var PIN_COORDINATE_Y = 70;
 var typeList = ['palace', 'flat', 'house', 'bungalo'];
 var map = document.querySelector('.map');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -39,12 +39,10 @@ var showPin = function () {
   for (var i = 0; i < advertsInfo.length; i++) {
     var pinElement = pinTemplate.cloneNode(true);
     pinElement.style = 'left:' + (advertsInfo[i].location.x - PIN_COORDINATE_X) + 'px;' + 'top:' + (advertsInfo[i].location.y - PIN_COORDINATE_Y) + 'px';
-    var srcAttribute = pinElement.querySelector('img');
-    srcAttribute.src = advertsInfo[i].author.avatar;
-    var altAttribute = pinElement.querySelector('img');
-    altAttribute.alt = advertsInfo[i].offer.type;
+    var imgAttribute = pinElement.querySelector('img');
+    imgAttribute.src = advertsInfo[i].author.avatar;
+    imgAttribute.alt = advertsInfo[i].offer.type;
     fragment.appendChild(pinElement);
-    mapPins.appendChild(fragment);
   }
   mapPins.appendChild(fragment);
 };
