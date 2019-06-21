@@ -7,8 +7,13 @@ var typeList = ['palace', 'flat', 'house', 'bungalo'];
 var map = document.querySelector('.map');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var mapPins = document.querySelector('.map__pins');
-
-map.classList.remove('map--faded'); //  этот класс переключает карту из неактивного состояния в активное
+var adForm = document.querySelector('.ad-form');
+var formAdFieldset = adForm.querySelectorAll('.ad-form__element');
+var mapFiltersForm = document.querySelector('.map__filters');
+var mapFiltersFormSelect = mapFiltersForm.querySelectorAll('.map__filter');
+var mapFiltersFormFieldset = mapFiltersForm.querySelector('.map__features');
+var mapPinMain = mapPins.querySelector('.map__pin--main');
+var addressField = adForm.querySelector('#address');
 
 var getRandomNumber = function (param1, param2) {
   return Math.round(Math.random() * (param2 - param1) + param1);
@@ -48,6 +53,42 @@ var showPin = function () {
   mapPins.appendChild(fragment);
 };
 
-showPin();
+// Задание 4 Личный проект: подробности
 
+var setFormElementsDisabled = function (elementsDisabledArray) {
+  for (var i = 0; i < elementsDisabledArray.lenght; i++) {
+    var currentElement = elementsDisabledArray[i];
+    currentElement.setAttribute('disabled', '');
+  }
+};
+
+setFormElementsDisabled(formAdFieldset);
+setFormElementsDisabled(mapFiltersFormSelect);
+setFormElementsDisabled(mapFiltersFormFieldset);
+
+var removeFormElementsDisabled = function (elementsDisabledArray) {
+  for (var i = 0; i < elementsDisabledArray.lenght; i++) {
+    var currentElement = elementsDisabledArray[i];
+    currentElement.removeAttribute('disabled');
+  }
+};
+
+var mapPinMainOnClick = function () {
+  adForm.classList.remove('ad-form--disabled');
+  map.classList.remove('map--faded');
+  showPin();
+  removeFormElementsDisabled(formAdFieldset);
+  removeFormElementsDisabled(mapFiltersFormSelect);
+  removeFormElementsDisabled(mapFiltersFormFieldset);
+};
+
+mapPinMain.addEventListener('click', mapPinMainOnClick);
+mapPinMain.addEventListener('mouseup', function (evt) {
+  evt.preventDefault();
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+  addressField.value = startCoords.x + ',' + startCoords.y;
+});
 
