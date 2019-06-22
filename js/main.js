@@ -82,8 +82,8 @@ mapPinMain.addEventListener('mouseup', function (evt) {
   evt.preventDefault();
   var mapCords = map.getBoundingClientRect();
   var pinCoords = {
-    x: evt.clientX - mapCords.x - PIN_COORDINATE_X,
-    y: evt.clientY - PIN_COORDINATE_Y
+    x: evt.pageX - mapCords.x - PIN_COORDINATE_X,
+    y: evt.pageY - PIN_COORDINATE_Y
   };
 
   addressField.setAttribute('readonly', true);
