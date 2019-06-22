@@ -7,13 +7,10 @@ var typeList = ['palace', 'flat', 'house', 'bungalo'];
 var map = document.querySelector('.map');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var mapPins = document.querySelector('.map__pins');
-var adForm = document.querySelector('.ad-form');
-var formAdFieldset = adForm.querySelectorAll('.ad-form__element');
-var mapFiltersForm = document.querySelector('.map__filters');
-var mapFiltersFormSelect = mapFiltersForm.querySelectorAll('.map__filter');
-var mapFiltersFormFieldset = mapFiltersForm.querySelector('.map__features');
+var formElements = document.querySelectorAll('form fieldset, form select');
+var addressField = document.querySelector('#address');
 var mapPinMain = mapPins.querySelector('.map__pin--main');
-var addressField = adForm.querySelector('#address');
+
 
 var getRandomNumber = function (param1, param2) {
   return Math.round(Math.random() * (param2 - param1) + param1);
@@ -55,40 +52,39 @@ var showPin = function () {
 
 // Задание 4 Личный проект: подробности
 
-var setFormElementsDisabled = function (elementsDisabledArray) {
-  for (var i = 0; i < elementsDisabledArray.lenght; i++) {
-    var currentElement = elementsDisabledArray[i];
-    currentElement.setAttribute('disabled', '');
+var setFormElementsDisabled = function (elementsArray) {
+  for (var i = 0; i < elementsArray.lenght; i++) {
+    var currentElement = elementsArray[i];
+    currentElement.setAttribute('disabled', true);
   }
 };
+setFormElementsDisabled(formElements);
 
-setFormElementsDisabled(formAdFieldset);
-setFormElementsDisabled(mapFiltersFormSelect);
-setFormElementsDisabled(mapFiltersFormFieldset);
 
-var removeFormElementsDisabled = function (elementsDisabledArray) {
-  for (var i = 0; i < elementsDisabledArray.lenght; i++) {
-    var currentElement = elementsDisabledArray[i];
+var removeFormElementsDisabled = function (elementsArray) {
+  for (var i = 0; i < elementsArray.lenght; i++) {
+    var currentElement = elementsArray[i];
     currentElement.removeAttribute('disabled');
   }
 };
 
-var mapPinMainOnClick = function () {
-  adForm.classList.remove('ad-form--disabled');
+var onMapPinMainClick = function () {
   map.classList.remove('map--faded');
   showPin();
-  removeFormElementsDisabled(formAdFieldset);
-  removeFormElementsDisabled(mapFiltersFormSelect);
-  removeFormElementsDisabled(mapFiltersFormFieldset);
+  removeFormElementsDisabled(formElements);
+  mapPinMain.removeEventListener('click', onMapPinMainClick);
 };
 
-mapPinMain.addEventListener('click', mapPinMainOnClick);
+mapPinMain.addEventListener('click', onMapPinMainClick);
 mapPinMain.addEventListener('mouseup', function (evt) {
   evt.preventDefault();
-  var startCoords = {
-    x: evt.clientX,
-    y: evt.clientY
+  var mapCords = map.getBoundingClientRect();
+  var pinCoords = {
+    x: evt.clientX - parseInt(mapCords.x, 10) - PIN_COORDINATE_X,
+    y: evt.clientY + PIN_COORDINATE_Y
   };
-  addressField.value = startCoords.x + ',' + startCoords.y;
+
+  addressField.value = pinCoords.x + ',' + pinCoords.y;
 });
+
 
