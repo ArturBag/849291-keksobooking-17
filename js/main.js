@@ -7,6 +7,7 @@ var typeList = ['palace', 'flat', 'house', 'bungalo'];
 var map = document.querySelector('.map');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var mapPins = document.querySelector('.map__pins');
+var adForm = document.querySelector('.ad-form');
 var formElements = document.querySelectorAll('form fieldset, form select');
 var addressField = document.querySelector('#address');
 var mapPinMain = mapPins.querySelector('.map__pin--main');
@@ -53,7 +54,7 @@ var showPin = function () {
 // Задание 4 Личный проект: подробности
 
 var setFormElementsDisabled = function (elementsArray) {
-  for (var i = 0; i < elementsArray.lenght; i++) {
+  for (var i = 0; i < elementsArray.length; i++) {
     var currentElement = elementsArray[i];
     currentElement.setAttribute('disabled', true);
   }
@@ -62,7 +63,7 @@ setFormElementsDisabled(formElements);
 
 
 var removeFormElementsDisabled = function (elementsArray) {
-  for (var i = 0; i < elementsArray.lenght; i++) {
+  for (var i = 0; i < elementsArray.length; i++) {
     var currentElement = elementsArray[i];
     currentElement.removeAttribute('disabled');
   }
@@ -71,6 +72,7 @@ var removeFormElementsDisabled = function (elementsArray) {
 var onMapPinMainClick = function () {
   map.classList.remove('map--faded');
   showPin();
+  adForm.classList.remove('ad-form--disabled');
   removeFormElementsDisabled(formElements);
   mapPinMain.removeEventListener('click', onMapPinMainClick);
 };
@@ -80,11 +82,12 @@ mapPinMain.addEventListener('mouseup', function (evt) {
   evt.preventDefault();
   var mapCords = map.getBoundingClientRect();
   var pinCoords = {
-    x: evt.clientX - parseInt(mapCords.x, 10) - PIN_COORDINATE_X,
-    y: evt.clientY + PIN_COORDINATE_Y
+    x: evt.clientX - mapCords.x - PIN_COORDINATE_X,
+    y: evt.clientY - PIN_COORDINATE_Y
   };
 
-  addressField.value = pinCoords.x + ',' + pinCoords.y;
+  addressField.setAttribute('readonly', true);
+  addressField.value = parseInt(pinCoords.x, 10) + ',' + parseInt(pinCoords.y, 10);
 });
 
 
