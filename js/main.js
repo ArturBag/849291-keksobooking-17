@@ -8,13 +8,14 @@ var map = document.querySelector('.map');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var mapPins = document.querySelector('.map__pins');
 var adForm = document.querySelector('.ad-form');
-var formElements = document.querySelectorAll('form fieldset, form select');
-var addressField = document.querySelector('#address');
+var formElements = adForm.querySelectorAll('form fieldset, form select');
+var addressField = adForm.querySelector('#address');
 var mapPinMain = mapPins.querySelector('.map__pin--main');
-var selectType = document.querySelector('#type');
-var priceField = document.querySelector('#price');
-var timeIn = document.querySelector('#timein');
-var timeOut = document.querySelector('#timeout');
+var selectType = adForm.querySelector('#type');
+var priceField = adForm.querySelector('#price');
+var timeIn = adForm.querySelector('#timein');
+var timeOut = adForm.querySelector('#timeout');
+var capacity = adForm.querySelector('#capacity');
 
 
 var getRandomNumber = function (param1, param2) {
@@ -78,6 +79,7 @@ var onMapPinMainClick = function () {
   showPin();
   adForm.classList.remove('ad-form--disabled');
   removeFormElementsDisabled(formElements);
+  capacity[2].selected = true;
   mapPinMain.removeEventListener('click', onMapPinMainClick);
   moveMapPin(mapPinMain);
 };
@@ -105,7 +107,6 @@ var setMinPrice = function () {
     'HOUSE': 5000,
     'PALACE': 10000
   };
-
   selectType.addEventListener('change', function (evt) {
     priceField.placeholder = PriceSuitability[evt.currentTarget.value.toUpperCase()];
   });
