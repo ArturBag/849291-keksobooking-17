@@ -1,8 +1,10 @@
 'use strict';
 
 var ADVERTS_NUMBER = 8;
-var PIN_COORDINATE_X = 25;
+var PIN_COORDINATE_X = 35;
 var PIN_COORDINATE_Y = 70;
+var MAP_COORDS_RESTRICT_TOP = 130;
+var MAP_COORDS_RESTRICT_BOTTOM = 120;
 var typeList = ['palace', 'flat', 'house', 'bungalo'];
 var map = document.querySelector('.map');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -74,23 +76,12 @@ var removeFormElementsDisabled = function (elementsArray) {
   }
 };
 
-var onMapPinMainClick = function () {
-  map.classList.remove('map--faded');
-  showPin();
-  adForm.classList.remove('ad-form--disabled');
-  removeFormElementsDisabled(formElements);
-  capacity[2].selected = true;
-  mapPinMain.removeEventListener('click', onMapPinMainClick);
-  moveMapPin(mapPinMain);
-};
-
-mapPinMain.addEventListener('click', onMapPinMainClick);
 mapPinMain.addEventListener('mouseup', function (evt) {
   evt.preventDefault();
   var mapCords = map.getBoundingClientRect();
   var pinCoords = {
     x: evt.pageX - mapCords.x - PIN_COORDINATE_X,
-    y: evt.pageY - PIN_COORDINATE_Y
+    y: evt.pageY - PIN_COORDINATE_Y,
   };
 
   addressField.setAttribute('readonly', true);
@@ -109,6 +100,7 @@ var setMinPrice = function () {
   };
   selectType.addEventListener('change', function (evt) {
     priceField.placeholder = PriceSuitability[evt.currentTarget.value.toUpperCase()];
+    priceField.min = PriceSuitability[evt.currentTarget.value.toUpperCase()];
   });
 };
 setMinPrice();
@@ -120,10 +112,22 @@ var setTimeInOut = function () {
 };
 setTimeInOut();
 
+// Задание 5.Личный проект: максимум подвижности
+
 var moveMapPin = function (elem) {
+  var isShowPin = true;
 
   elem.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
+    if (isShowPin) {
+      showPin();
+      isShowPin = false;
+    }
+
+    map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+    removeFormElementsDisabled(formElements);
+    capacity[2].selected = true;
 
     var startCoords = {
       x: evt.clientX,
@@ -132,24 +136,29 @@ var moveMapPin = function (elem) {
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
-
       var shift = {
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y - moveEvt.clientY
       };
 
 
-      elem.style.top = (elem.offsetTop - shift.y) + 'px';
-      elem.style.left = (elem.offsetLeft - shift.x) + 'px';
+      elem.style.left = elem.offsetLeft - shift.x + 'px';
+      elem.style.top = elem.offsetTop - shift.y + 'px';
+
       startCoords = {
         x: moveEvt.clientX,
         y: moveEvt.clientY
       };
-
     };
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
+
+      startCoords = {
+        x: evt.clientX,
+        y: evt.clientY
+      };
+
 
       map.removeEventListener('mousemove', onMouseMove);
       map.removeEventListener('mouseup', onMouseUp);
@@ -159,5 +168,6 @@ var moveMapPin = function (elem) {
     map.addEventListener('mouseup', onMouseUp);
   });
 };
+moveMapPin(mapPinMain);
 
 
