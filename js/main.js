@@ -3,8 +3,6 @@
 var ADVERTS_NUMBER = 8;
 var PIN_COORDINATE_X = 35;
 var PIN_COORDINATE_Y = 70;
-var MAP_COORDS_RESTRICT_TOP = 130;
-var MAP_COORDS_RESTRICT_BOTTOM = 120;
 var typeList = ['palace', 'flat', 'house', 'bungalo'];
 var map = document.querySelector('.map');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -134,8 +132,10 @@ var moveMapPin = function (elem) {
       y: evt.clientY
     };
 
+
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
+
       var shift = {
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y - moveEvt.clientY
@@ -144,6 +144,12 @@ var moveMapPin = function (elem) {
 
       elem.style.left = elem.offsetLeft - shift.x + 'px';
       elem.style.top = elem.offsetTop - shift.y + 'px';
+
+      if (elem.style.top >= '630px') {
+        elem.style.top = '630px';
+      } else if (elem.style.top <= '130px') {
+        elem.style.top = '130px';
+      }
 
       startCoords = {
         x: moveEvt.clientX,
@@ -169,5 +175,3 @@ var moveMapPin = function (elem) {
   });
 };
 moveMapPin(mapPinMain);
-
-
