@@ -30,23 +30,27 @@
     });
   };
 
+  var removeFormElementsDisabled = function (elementsArray) {
+    for (var i = 0; i < elementsArray.length; i++) {
+      var currentElement = elementsArray[i];
+      currentElement.removeAttribute('disabled');
+    }
+  };
+
+  var setFormElementsDisabled = function (elementsArray) {
+    for (var i = 0; i < elementsArray.length; i++) {
+      var currentElement = elementsArray[i];
+      currentElement.setAttribute('disabled', true);
+    }
+  };
+
   window.form = {
     adForm: adForm,
     formElements: formElements,
     addressField: addressField,
     capacity: capacity,
-    removeFormElementsDisabled: function (elementsArray) {
-      for (var i = 0; i < elementsArray.length; i++) {
-        var currentElement = elementsArray[i];
-        currentElement.removeAttribute('disabled');
-      }
-    },
-    setFormElementsDisabled: function (elementsArray) {
-      for (var i = 0; i < elementsArray.length; i++) {
-        var currentElement = elementsArray[i];
-        currentElement.setAttribute('disabled', true);
-      }
-    }
+    removeFormElementsDisabled: removeFormElementsDisabled,
+    setFormElementsDisabled: setFormElementsDisabled
   };
   window.form.setFormElementsDisabled(formElements);
   setMinPrice();

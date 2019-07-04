@@ -2,8 +2,7 @@
 
 (function () {
   var ADVERTS_NUMBER = 8;
-
-  window.pin.createAdvert = function (typesArray) {
+  var createAdvert = function (typesArray) {
     var adverts = [];
     for (var i = 0; i < ADVERTS_NUMBER; i++) {
       adverts.push({
@@ -20,5 +19,9 @@
       });
     }
     return adverts;
+  };
+
+  window.pin = {
+    createAdvert: createAdvert
   };
 })();
