@@ -31,7 +31,7 @@
   };
 
   var load = function (onLoad, onError) {
-    ajaxSendData(onLoad, onError, 'GET', null)
+    ajaxSendData(onLoad, onError, 'GET', null);
 
   };
 
