@@ -4,22 +4,22 @@
 
   var PIN_COORDINATE_X = 35;
   var PIN_COORDINATE_Y = 70;
-  var typeList = ['palace', 'flat', 'house', 'bungalo'];
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var map = document.querySelector('.map');
   var mapPins = document.querySelector('.map__pins');
   var mapPinMain = mapPins.querySelector('.map__pin--main');
+  var adverts = [];
+  var errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
   var showPin = function () {
     var fragment = document.createDocumentFragment();
-    var advertsInfo = window.pin.createAdvert(typeList);
-    for (var i = 0; i < advertsInfo.length; i++) {
+    for (var i = 0; i < adverts.length; i++) {
       var pinElement = pinTemplate.cloneNode(true);
-      pinElement.style.left = advertsInfo[i].location.x - PIN_COORDINATE_X + 'px';
-      pinElement.style.top = advertsInfo[i].location.y - PIN_COORDINATE_Y + 'px';
+      pinElement.style.left = adverts[i].location.x - PIN_COORDINATE_X + 'px';
+      pinElement.style.top = adverts[i].location.y - PIN_COORDINATE_Y + 'px';
       var imgAttribute = pinElement.querySelector('img');
-      imgAttribute.src = advertsInfo[i].author.avatar;
-      imgAttribute.alt = advertsInfo[i].offer.type;
+      imgAttribute.src = adverts[i].author.avatar;
+      imgAttribute.alt = adverts[i].offer.type;
       fragment.appendChild(pinElement);
     }
     mapPins.appendChild(fragment);
@@ -87,6 +87,25 @@
     window.form.addressField.value = parseInt(pinCoords.x, 10) + ',' + parseInt(pinCoords.y, 10);
   });
 
+  var onSuccess = function (responseData) {
+    adverts = responseData;
+  };
+
+  var onError = function (errorMessage) {
+    var node = errorTemplate.cloneNode(true);
+    var reloadButton = node.querySelector('.error__button');
+    var onButtonClickReloader = function () {
+      window.location.reload();
+    };
+    document.body.insertAdjacentElement('afterbegin', node);
+
+    if (errorMessage) {
+      reloadButton.addEventListener('click', onButtonClickReloader);
+    }
+  };
+
   window.mapControl.moveMapPin(mapPinMain);
+
+  window.backend.load(onSuccess, onError);
 
 })();
