@@ -7,9 +7,16 @@
   mapFiltersType.addEventListener('change', function (evt) {
     var housingType = evt.currentTarget.value;
     var pinsForOutput = pinsList.slice().filter(function (it) {
+
       return housingType === 'any' || it.offer.type === housingType;
     });
-    window.mapControl.showPin(pinsForOutput);
+
+    if (housingType === 'any') {
+      window.mapControl.showPin(pinsForOutput);
+    } else {
+      window.mapControl.showPin(pinsForOutput.slice(0, 5));
+    }
+
   });
 
   var onSuccess = function (pinsJson) {
