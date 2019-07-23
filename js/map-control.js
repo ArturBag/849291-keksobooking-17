@@ -11,15 +11,16 @@
   var adverts = [];
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
-  var showPin = function () {
+  var showPin = function (data) {
+    mapPins.innerHTML = '';
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < adverts.length; i++) {
+    for (var i = 0; i < data.length; i++) {
       var pinElement = pinTemplate.cloneNode(true);
-      pinElement.style.left = adverts[i].location.x - PIN_COORDINATE_X + 'px';
-      pinElement.style.top = adverts[i].location.y - PIN_COORDINATE_Y + 'px';
+      pinElement.style.left = data[i].location.x - PIN_COORDINATE_X + 'px';
+      pinElement.style.top = data[i].location.y - PIN_COORDINATE_Y + 'px';
       var imgAttribute = pinElement.querySelector('img');
-      imgAttribute.src = adverts[i].author.avatar;
-      imgAttribute.alt = adverts[i].offer.type;
+      imgAttribute.src = data[i].author.avatar;
+      imgAttribute.alt = data[i].offer.type;
       fragment.appendChild(pinElement);
     }
     mapPins.appendChild(fragment);
@@ -31,7 +32,7 @@
     elem.addEventListener('mousedown', function (evt) {
       evt.preventDefault();
       if (isShowPin) {
-        window.mapControl.showPin();
+        window.mapControl.showPin(adverts);
         isShowPin = false;
       }
 
@@ -72,7 +73,8 @@
 
   window.mapControl = {
     showPin: showPin,
-    moveMapPin: moveMapPin
+    moveMapPin: moveMapPin,
+    errorTemplate: errorTemplate
   };
 
   mapPinMain.addEventListener('mouseup', function (evt) {
