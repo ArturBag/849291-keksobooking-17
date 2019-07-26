@@ -7,21 +7,29 @@
   var cardsInfo = [];
   var fragment = document.createDocumentFragment();
   var mapFiltersContainer = document.querySelector('.map__filters-container');
+  var HousingType = {
+    'ANY': 'Любой тип жилья',
+    'PALACE': 'Дворец',
+    'FLAT': 'Квартира',
+    'HOUSE': 'Дом',
+    'BUNGALO': 'Бунгало'
+  };
 
   var renderAdvertCard = function (cardsData) {
 
     var card = cardTemplate.cloneNode(true);
+
+
     card.querySelector('.popup__avatar').src = cardsData.author.avatar;
     card.querySelector('.popup__title').innerText = cardsData.offer.title;
     card.querySelector('.popup__text--address').innerText = cardsData.offer.address;
     card.querySelector('.popup__text--price').innerHTML = cardsData.offer.price + ' &#x20bd;<span>/ночь</span>';
-    card.querySelector('.popup__type').innerText = cardsData.offer.type;
+    card.querySelector('.popup__type').innerText = HousingType[cardsData.offer.type.toUpperCase()];
     card.querySelector('.popup__text--capacity').innerText = cardsData.offer.rooms
       + ' комнаты для ' + cardsData.offer.guests + ' гостей';
     card.querySelector('.popup__text--time').innerText = 'Заезд после ' + cardsData.offer.checkin
       + ', выезд до ' + cardsData.offer.checkout;
     var featuresList = card.querySelectorAll('.popup__feature');
-
     featuresList.forEach(function (it) {
       it.style.display = 'none';
     });
