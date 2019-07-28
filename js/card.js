@@ -2,9 +2,9 @@
 
 (function () {
 
+  var ESC_KEYCODE = 27;
   var cardTemplate = document.querySelector('#card').content.
     querySelector('.popup');
-  var cardsInfo = [];
   var fragment = document.createDocumentFragment();
   var mapFiltersContainer = document.querySelector('.map__filters-container');
   var HousingType = {
@@ -15,10 +15,10 @@
     'BUNGALO': 'Бунгало'
   };
 
-  var renderAdvertCard = function (cardsData) {
-
-    var card = cardTemplate.cloneNode(true);
-
+  window.renderAdvertCard = function (evt, cardsData) {
+    cardsData = cardsData[evt.currentTarget.getAttribute('data-id')];
+    var card = cardTemplate;
+    var closePopupButton = card.querySelector('.popup__close');
 
     card.querySelector('.popup__avatar').src = cardsData.author.avatar;
     card.querySelector('.popup__title').innerText = cardsData.offer.title;
@@ -48,15 +48,33 @@
     });
     photoTemplate.style.display = 'none';
 
+    var closePopup = function () {
+      card.style = 'display:none';
+    };
+    var onPopupClose = function (closeEvt) {
+      closeEvt.preventDefault();
+      closePopup();
+    };
+
+    var onPopupEscPress = function (escEvt) {
+      escEvt.preventDefault();
+      if (escEvt.keyCode === ESC_KEYCODE) {
+        closePopup();
+      }
+
+    };
+    card.style = 'display:block';
+
+
+    closePopupButton.addEventListener('click', onPopupClose);
+
+    document.addEventListener('keydown', onPopupEscPress);
+
     fragment.appendChild(card);
     mapFiltersContainer.insertBefore(fragment, null);
   };
 
-
-  var onSuccess = function (responseData) {
-    cardsInfo = responseData[3];
-    renderAdvertCard(cardsInfo);
-  };
+  var onSuccess = function () { };
 
   var onError = function (errorMessage) {
     var node = window.mapControl.errorTemplate.cloneNode(true);

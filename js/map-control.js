@@ -21,6 +21,12 @@
       var imgAttribute = pinElement.querySelector('img');
       imgAttribute.src = data[i].author.avatar;
       imgAttribute.alt = data[i].offer.type;
+
+      pinElement.setAttribute('data-id', i);
+
+      pinElement.onclick = function (evt) {
+        window.renderAdvertCard(evt, data);
+      };
       fragment.appendChild(pinElement);
     }
     mapPins.appendChild(fragment);
