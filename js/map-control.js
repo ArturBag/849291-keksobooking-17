@@ -24,9 +24,13 @@
 
       pinElement.setAttribute('data-id', i);
 
-      pinElement.onclick = function (evt) {
-        window.renderAdvertCard(evt, data);
-      };
+      (function (currentPinData, currentElement) {
+
+        currentElement.addEventListener('click', function (evt) {
+          window.card.renderAdvertCard(evt, currentPinData);
+        });
+
+      })(data[i], pinElement);
       fragment.appendChild(pinElement);
     }
     mapPins.appendChild(fragment);
