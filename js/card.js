@@ -7,6 +7,7 @@
     querySelector('.popup');
   var fragment = document.createDocumentFragment();
   var mapFiltersContainer = document.querySelector('.map__filters-container');
+  var oldCard = cardTemplate;
   var HousingType = {
     'ANY': 'Любой тип жилья',
     'PALACE': 'Дворец',
@@ -16,8 +17,8 @@
   };
 
   var renderAdvertCard = function (evt, cardData) {
-
-    var card = cardTemplate;
+    oldCard.remove();
+    var card = cardTemplate.cloneNode(true);
     var closePopupButton = card.querySelector('.popup__close');
 
     card.querySelector('.popup__avatar').src = cardData.author.avatar;
@@ -69,30 +70,15 @@
 
     fragment.appendChild(card);
     mapFiltersContainer.insertBefore(fragment, null);
+    oldCard = card;
   };
 
   var closePopup = function (elemToClose) {
-    elemToClose.style = 'display:none';
-  };
-
-  var onSuccess = function () { };
-
-  var onError = function (errorMessage) {
-    var node = window.mapControl.errorTemplate.cloneNode(true);
-    var reloadButton = node.querySelector('.error__button');
-    var onButtonClickReloader = function () {
-      window.location.reload();
-    };
-    document.body.insertAdjacentElement('afterbegin', node);
-
-    if (errorMessage) {
-      reloadButton.addEventListener('click', onButtonClickReloader);
-    }
+    elemToClose.remove();
   };
 
   window.card = {
     renderAdvertCard: renderAdvertCard
   };
 
-  window.backend.load(onSuccess, onError);
 })();

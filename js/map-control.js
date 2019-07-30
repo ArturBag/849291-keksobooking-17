@@ -31,6 +31,7 @@
         });
 
       })(data[i], pinElement);
+
       fragment.appendChild(pinElement);
     }
     mapPins.appendChild(fragment);
