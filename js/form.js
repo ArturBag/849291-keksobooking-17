@@ -9,7 +9,11 @@
   var priceField = adForm.querySelector('#price');
   var timeIn = adForm.querySelector('#timein');
   var timeOut = adForm.querySelector('#timeout');
+  var rooms = adForm.querySelector('#room_number');
+  var roomsList = adForm.querySelectorAll('#room_number option');
   var capacity = adForm.querySelector('#capacity');
+  var btnSubmit = adForm.querySelector('.ad-form__submit');
+
 
   var setMinPrice = function () {
     var PriceSuitability = {
@@ -43,6 +47,25 @@
       currentElement.setAttribute('disabled', true);
     }
   };
+
+  capacity.addEventListener('change', function (evt) {
+    var selectedOption = parseInt(evt.currentTarget.value, 10);
+    if (selectedOption === 0) {
+      selectedOption = roomsList.length;
+    }
+    roomsList[selectedOption - 1].selected = true;
+  });
+
+  btnSubmit.addEventListener('click', function () {
+    var capcityQty = parseInt(capacity.value, 10);
+    var roomsQty = parseInt(rooms.value, 10);
+    if (roomsQty < capcityQty || (capcityQty === 0 && roomsQty !== 100) || (capcityQty > 0 && roomsQty === 100)) {
+      rooms.setCustomValidity('Количество комнат не соответствует количеству гостей');
+    } else {
+      rooms.setCustomValidity('');
+    }
+
+  });
 
   window.form = {
     adForm: adForm,
