@@ -12,6 +12,8 @@
   var rooms = adForm.querySelector('#room_number');
   var roomsList = adForm.querySelectorAll('#room_number option');
   var capacity = adForm.querySelector('#capacity');
+  var btnSubmit = adForm.querySelector('.ad-form__submit');
+
 
   var setMinPrice = function () {
     var PriceSuitability = {
@@ -47,47 +49,23 @@
   };
 
   capacity.addEventListener('change', function (evt) {
-    var selectedOption = parseInt(evt.currentTarget.value);
+    var selectedOption = parseInt(evt.currentTarget.value, 10);
     if (selectedOption === 0) {
       selectedOption = roomsList.length;
     }
     roomsList[selectedOption - 1].selected = true;
   });
 
-  rooms.addEventListener('change', function () {
-    // var flag = false;
-    // console.log(rooms.length)
-    var capcityQty = capacity.value;
-    var roomsQty = rooms.value;
-    // console.log('capcityQty lenght', rooms.lenght, 'roomsQty lenght',capacity.lenght)
-
-    // if (capcityQty <= roomsQty && capcityQty !== 0) {
-    //   flag = true;
-    //   console.log('correct')
-
-    // } else if (capcityQty === 0 && roomsQty === 100) {
-    //   flag = true;
-    //   console.log('correct++')
-    // }
-
-    // else {
-    //   rooms.setCustomValidity('Количество комнат не соответствует количеству гостей');
-    //   flag = false;
-    //   console.log('NOTcorrect')
-    // }
-
-    // console.log(flag)
-    //console.log(capcityQty, roomsQty, capacity === 0, roomsQty < 100)
-    //console.log(rooms.selectedIndex, capacity.selectedIndex, rooms.selectedIndex != capacity.selectedIndex)
-    if (capacity.selectedIndex != rooms.length - 1 || roomsQty < capcityQty
-    ) {
+  btnSubmit.addEventListener('click', function () {
+    var capcityQty = parseInt(capacity.value, 10);
+    var roomsQty = parseInt(rooms.value, 10);
+    if (roomsQty < capcityQty || (capcityQty === 0 && roomsQty !== 100) || (capcityQty > 0 && roomsQty === 100)) {
       rooms.setCustomValidity('Количество комнат не соответствует количеству гостей');
-      // console.log(roomsQty, capcityQty);
+    } else {
+      rooms.setCustomValidity('');
     }
 
-
-
-  })
+  });
 
   window.form = {
     adForm: adForm,
