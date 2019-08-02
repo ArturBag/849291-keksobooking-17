@@ -87,7 +87,8 @@
     moveMapPin: moveMapPin,
     errorTemplate: errorTemplate,
     mapPins: mapPins,
-    map: map
+    map: map,
+    mapPinMain: mapPinMain
   };
 
   mapPinMain.addEventListener('mousedown', function (evt) {
@@ -121,7 +122,6 @@
   };
 
   window.mapControl.moveMapPin(mapPinMain);
-
   window.backend.load(onSuccess, onError);
 
 })();
