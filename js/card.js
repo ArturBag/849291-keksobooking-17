@@ -9,8 +9,6 @@
   var mapFiltersContainer = document.querySelector('.map__filters-container');
   var popupCard = document.querySelector('.popup');
   var oldCard = cardTemplate;
-  // var activeCard = '';
-  // console.log(activeCard)
   var HousingType = {
     'ANY': 'Любой тип жилья',
     'PALACE': 'Дворец',
@@ -61,14 +59,9 @@
       if (escEvt.keyCode === ESC_KEYCODE) {
         closePopup(card);
         escEvt.preventDefault();
-
       }
 
     };
-    // card.style = 'display:block';
-    // if (window.form.successResult) {
-    //   oldCard.remove();
-    // }
 
     closePopupButton.addEventListener('click', onPopupClose);
 
@@ -79,14 +72,16 @@
     oldCard = card;
   };
 
+
   var closePopup = function (elemToClose) {
     elemToClose.remove();
   };
 
+
   window.card = {
     renderAdvertCard: renderAdvertCard,
     closePopup: closePopup,
-    popupCard: popupCard
+    popupCard: popupCard,
   };
 
 })();

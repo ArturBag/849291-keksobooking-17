@@ -139,23 +139,29 @@
     adForm.classList.add('ad-form--disabled');
     window.form.setFormElementsDisabled(formElements);
     window.mapControl.showPin({});
-    // window.card.renderAdvertCard();
     window.mapControl.mapPinMain.style = 'left:' + DefaultCoordinate.LEFT + ';' + 'top: ' + DefaultCoordinate.TOP + ';';
     titleField.value = '';
     priceField.value = '';
     addressField.value = parseInt(DefaultCoordinate.LEFT, 10) + ',' + parseInt(DefaultCoordinate.TOP, 10);
-    window.card.popupCard.remove();
   };
 
   resetBtn.addEventListener('click', function (evt) {
     evt.preventDefault();
     setFormInactive();
+    removeActiveCard();
   });
+
+  var removeActiveCard = function () {
+    var popupToClose = document.querySelector('.popup');
+    if (popupToClose !== null) {
+      popupToClose.remove();
+    }
+  };
 
   var onSuccess = function () {
     setFormInactive();
     setSuccessMessage();
-    window.card.popupCard.remove();
+    removeActiveCard();
   };
 
   var onError = function (errorMessage) {
