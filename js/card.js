@@ -7,6 +7,7 @@
     querySelector('.popup');
   var fragment = document.createDocumentFragment();
   var mapFiltersContainer = document.querySelector('.map__filters-container');
+  var popupCard = document.querySelector('.popup');
   var oldCard = cardTemplate;
   var HousingType = {
     'ANY': 'Любой тип жилья',
@@ -55,14 +56,12 @@
     };
 
     var onPopupEscPress = function (escEvt) {
-      escEvt.preventDefault();
       if (escEvt.keyCode === ESC_KEYCODE) {
         closePopup(card);
+        escEvt.preventDefault();
       }
 
     };
-    card.style = 'display:block';
-
 
     closePopupButton.addEventListener('click', onPopupClose);
 
@@ -73,12 +72,16 @@
     oldCard = card;
   };
 
+
   var closePopup = function (elemToClose) {
     elemToClose.remove();
   };
 
+
   window.card = {
-    renderAdvertCard: renderAdvertCard
+    renderAdvertCard: renderAdvertCard,
+    closePopup: closePopup,
+    popupCard: popupCard,
   };
 
 })();

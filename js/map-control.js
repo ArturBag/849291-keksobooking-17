@@ -8,11 +8,14 @@
   var map = document.querySelector('.map');
   var mapPins = document.querySelector('.map__pins');
   var mapPinMain = mapPins.querySelector('.map__pin--main');
+  var mapOverlay = mapPins.querySelector('.map__overlay');
   var adverts = [];
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
   var showPin = function (data) {
     mapPins.innerHTML = '';
+    mapPins.appendChild(mapOverlay);
+    mapPins.appendChild(mapPinMain);
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < data.length; i++) {
       var pinElement = pinTemplate.cloneNode(true);
@@ -38,14 +41,11 @@
   };
 
   var moveMapPin = function (elem) {
-    var isShowPin = true;
 
     elem.addEventListener('mousedown', function (evt) {
       evt.preventDefault();
-      if (isShowPin) {
-        window.mapControl.showPin(adverts);
-        isShowPin = false;
-      }
+      window.mapControl.showPin(adverts);
+
 
       map.classList.remove('map--faded');
       window.form.adForm.classList.remove('ad-form--disabled');
@@ -85,10 +85,13 @@
   window.mapControl = {
     showPin: showPin,
     moveMapPin: moveMapPin,
-    errorTemplate: errorTemplate
+    errorTemplate: errorTemplate,
+    mapPins: mapPins,
+    map: map,
+    mapPinMain: mapPinMain
   };
 
-  mapPinMain.addEventListener('mouseup', function (evt) {
+  mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
     var mapCords = map.getBoundingClientRect();
     var pinCoords = {
@@ -96,7 +99,8 @@
       y: evt.pageY - PIN_COORDINATE_Y,
     };
 
-    window.form.addressField.setAttribute('readonly', true);
+    window.form.addressField.setAttribute('readonly', 'true');
+
     window.form.addressField.value = parseInt(pinCoords.x, 10) + ',' + parseInt(pinCoords.y, 10);
   });
 
@@ -118,7 +122,6 @@
   };
 
   window.mapControl.moveMapPin(mapPinMain);
-
   window.backend.load(onSuccess, onError);
 
 })();
