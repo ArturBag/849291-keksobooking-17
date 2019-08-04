@@ -2,12 +2,13 @@
 
 (function () {
 
-  var housingTypeFilter = document.querySelector('#housing-type');
-  var housingPriceFilter = document.querySelector('#housing-price');
-  var housingRoomsFilter = document.querySelector('#housing-rooms');
-  var housingGuestsFilter = document.querySelector('#housing-guests');
-  var housingFeatures = document.querySelector('#housing-features');
-  var allFeatures = document.querySelectorAll('#housing-features input');
+  var filtersForm = document.querySelector('.map__filters');
+  var housingTypeFilter = filtersForm.querySelector('#housing-type');
+  var housingPriceFilter = filtersForm.querySelector('#housing-price');
+  var housingRoomsFilter = filtersForm.querySelector('#housing-rooms');
+  var housingGuestsFilter = filtersForm.querySelector('#housing-guests');
+  var housingFeatures = filtersForm.querySelector('#housing-features');
+  var allFeatures = filtersForm.querySelectorAll('#housing-features input');
   var selectedFeatures = [];
   var pinsList = [];
   var filterType = 'any';
@@ -77,6 +78,7 @@
       .filter(filterByGuests)
       .filter(filterByFeature).slice(0, 5);
 
+    window.form.removeActiveCard();
     window.debounce(window.mapControl.showPin.bind(null, filteredPins))();
   };
 
@@ -84,25 +86,37 @@
 
     filterType = evt.currentTarget.value;
     filterPins();
+
   });
 
   housingPriceFilter.addEventListener('change', function (evt) {
 
     filterPrice = evt.currentTarget.value;
     filterPins();
+
   });
 
   housingRoomsFilter.addEventListener('change', function (evt) {
 
     filterRooms = evt.currentTarget.value;
     filterPins();
+
   });
 
   housingGuestsFilter.addEventListener('change', function (evt) {
 
     filterGuests = evt.currentTarget.value;
     filterPins();
+
   });
+
+  var resetFilters = function () {
+    filterType = 'any';
+    filterPrice = 'any';
+    filterRooms = 'any';
+    filterGuests = 'any';
+    document.querySelector('.map__filters').reset();
+  };
 
   var onSuccess = function (pinsJson) {
     pinsList = pinsJson;
@@ -125,6 +139,8 @@
 
   window.backend.load(onSuccess, onError);
   window.filters = {
-    filterPins: filterPins
+    filtersForm: filtersForm,
+    filterPins: filterPins,
+    resetFilters: resetFilters
   };
 })();

@@ -9,7 +9,6 @@
   var mapPins = document.querySelector('.map__pins');
   var mapPinMain = mapPins.querySelector('.map__pin--main');
   var mapOverlay = mapPins.querySelector('.map__overlay');
-  // var adverts = [];
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
   var showPin = function (data) {
@@ -44,7 +43,6 @@
 
     elem.addEventListener('mousedown', function (evt) {
       evt.preventDefault();
-      // window.mapControl.showPin(adverts);
       window.filters.filterPins();
 
       map.classList.remove('map--faded');

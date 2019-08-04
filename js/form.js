@@ -162,6 +162,7 @@
     setFormInactive();
     setSuccessMessage();
     removeActiveCard();
+    window.filters.resetFilters();
   };
 
   var onError = function (errorMessage) {
@@ -176,7 +177,8 @@
     removeFormElementsDisabled: removeFormElementsDisabled,
     setFormElementsDisabled: setFormElementsDisabled,
     DefaultCoordinate: DefaultCoordinate,
-    successResult: successResult
+    successResult: successResult,
+    removeActiveCard: removeActiveCard
   };
   window.form.setFormElementsDisabled(formElements);
   setMinPrice();
