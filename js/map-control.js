@@ -9,7 +9,7 @@
   var mapPins = document.querySelector('.map__pins');
   var mapPinMain = mapPins.querySelector('.map__pin--main');
   var mapOverlay = mapPins.querySelector('.map__overlay');
-  var adverts = [];
+  // var adverts = [];
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
   var showPin = function (data) {
@@ -44,8 +44,8 @@
 
     elem.addEventListener('mousedown', function (evt) {
       evt.preventDefault();
-      window.mapControl.showPin(adverts);
-
+      // window.mapControl.showPin(adverts);
+      window.filters.filterPins();
 
       map.classList.remove('map--faded');
       window.form.adForm.classList.remove('ad-form--disabled');
@@ -104,24 +104,6 @@
     window.form.addressField.value = parseInt(pinCoords.x, 10) + ',' + parseInt(pinCoords.y, 10);
   });
 
-  var onSuccess = function (responseData) {
-    adverts = responseData;
-  };
-
-  var onError = function (errorMessage) {
-    var node = errorTemplate.cloneNode(true);
-    var reloadButton = node.querySelector('.error__button');
-    var onButtonClickReloader = function () {
-      window.location.reload();
-    };
-    document.body.insertAdjacentElement('afterbegin', node);
-
-    if (errorMessage) {
-      reloadButton.addEventListener('click', onButtonClickReloader);
-    }
-  };
-
   window.mapControl.moveMapPin(mapPinMain);
-  window.backend.load(onSuccess, onError);
 
 })();
