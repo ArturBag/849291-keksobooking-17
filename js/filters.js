@@ -70,7 +70,7 @@
     });
   };
 
-  var filterPins = function () {
+  var filterPins = window.debounce(function () {
     var filteredPins = pinsList
       .filter(filterByType)
       .filter(filterByPrice)
@@ -79,8 +79,8 @@
       .filter(filterByFeature).slice(0, 5);
 
     window.form.removeActiveCard();
-    window.debounce(window.mapControl.showPin.bind(null, filteredPins))();
-  };
+    window.mapControl.showPin(filteredPins);
+  });
 
   housingTypeFilter.addEventListener('change', function (evt) {
 
