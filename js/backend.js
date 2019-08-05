@@ -2,6 +2,7 @@
 (function () {
 
   var OK_STATUS = 200;
+  var XHR_TIMEOUT = 10000;
   var Url = {
     GET: 'https://js.dump.academy/keksobooking/data',
     SEND: 'https://js.dump.academy/keksobooking'
@@ -26,7 +27,7 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 10000;
+    xhr.timeout = XHR_TIMEOUT;
 
     xhr.open(methodType, url);
     xhr.send(data);

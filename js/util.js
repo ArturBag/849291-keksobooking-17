@@ -1,8 +1,9 @@
 'use strict';
 
 (function () {
+  var ESC_KEYCODE = 27;
   var DEBOUNCE_INTERVAL = 500;
-  window.debounce = function (cb) {
+  var debounce = function (cb) {
     var lastTimeout = null;
 
     return function () {
@@ -14,6 +15,11 @@
         cb.apply(null, parameters);
       }, DEBOUNCE_INTERVAL);
     };
+  };
+
+  window.util = {
+    ESC_KEYCODE: ESC_KEYCODE,
+    debounce: debounce
   };
 
 })();

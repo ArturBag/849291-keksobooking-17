@@ -2,12 +2,15 @@
 
 (function () {
 
-  var housingTypeFilter = document.querySelector('#housing-type');
-  var housingPriceFilter = document.querySelector('#housing-price');
-  var housingRoomsFilter = document.querySelector('#housing-rooms');
-  var housingGuestsFilter = document.querySelector('#housing-guests');
-  var housingFeatures = document.querySelector('#housing-features');
-  var allFeatures = document.querySelectorAll('#housing-features input');
+  var MAX_DISPLAYED_PINS = 5;
+  var form = document.querySelector('.map__filters');
+  var formElements = form.querySelectorAll('select, fieldset');
+  var housingTypeFilter = form.querySelector('#housing-type');
+  var housingPriceFilter = form.querySelector('#housing-price');
+  var housingRoomsFilter = form.querySelector('#housing-rooms');
+  var housingGuestsFilter = form.querySelector('#housing-guests');
+  var housingFeatures = form.querySelector('#housing-features');
+  var allFeatures = form.querySelectorAll('#housing-features input');
   var selectedFeatures = [];
   var pinsList = [];
   var filterType = 'any';
@@ -59,7 +62,7 @@
     });
     selectedFeatures = selectedArray;
 
-    filterPins();
+    pinsOutput();
   });
 
 
@@ -69,40 +72,53 @@
     });
   };
 
-  var filterPins = function () {
+  var pinsOutput = window.util.debounce(function () {
     var filteredPins = pinsList
       .filter(filterByType)
       .filter(filterByPrice)
       .filter(filterByRooms)
       .filter(filterByGuests)
-      .filter(filterByFeature).slice(0, 5);
+      .filter(filterByFeature).slice(0, MAX_DISPLAYED_PINS);
 
-    window.debounce(window.mapControl.showPin.bind(null, filteredPins))();
-  };
+    window.form.removeActiveCard();
+    window.mapControl.showPin(filteredPins);
+  });
 
   housingTypeFilter.addEventListener('change', function (evt) {
 
     filterType = evt.currentTarget.value;
-    filterPins();
+    pinsOutput();
+
   });
 
   housingPriceFilter.addEventListener('change', function (evt) {
 
     filterPrice = evt.currentTarget.value;
-    filterPins();
+    pinsOutput();
+
   });
 
   housingRoomsFilter.addEventListener('change', function (evt) {
 
     filterRooms = evt.currentTarget.value;
-    filterPins();
+    pinsOutput();
+
   });
 
   housingGuestsFilter.addEventListener('change', function (evt) {
 
     filterGuests = evt.currentTarget.value;
-    filterPins();
+    pinsOutput();
+
   });
+
+  var resetForm = function () {
+    filterType = 'any';
+    filterPrice = 'any';
+    filterRooms = 'any';
+    filterGuests = 'any';
+    document.querySelector('.map__filters').reset();
+  };
 
   var onSuccess = function (pinsJson) {
     pinsList = pinsJson;
@@ -125,6 +141,9 @@
 
   window.backend.load(onSuccess, onError);
   window.filters = {
-    filterPins: filterPins
+    form: form,
+    pinsOutput: pinsOutput,
+    resetForm: resetForm,
+    formElements: formElements
   };
 })();
