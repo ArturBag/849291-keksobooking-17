@@ -4,7 +4,7 @@
 
   var MAX_DISPLAYED_PINS = 5;
   var form = document.querySelector('.map__filters');
-  var formElements = form.querySelectorAll('fieldset');
+  var formElements = form.querySelectorAll('select, fieldset');
   var housingTypeFilter = form.querySelector('#housing-type');
   var housingPriceFilter = form.querySelector('#housing-price');
   var housingRoomsFilter = form.querySelector('#housing-rooms');

@@ -12,7 +12,7 @@
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
   var showPin = function (data) {
-    console.log(data)
+
     mapPins.innerHTML = '';
     mapPins.appendChild(mapOverlay);
     mapPins.appendChild(mapPinMain);
@@ -54,18 +54,41 @@
 
       pinElement.setAttribute('data-id', data.indexOf(it));
 
-      (function (currentPinData, currentElement) {
-        currentElement.addEventListener('click', function (evt) {
-          var activePin = mapPins.querySelector('.map__pin--active');
-          if (activePin) {
-            activePin.classList.remove('map__pin--active');
-          }
-          window.card.renderAdvertCard(evt, currentPinData);
-          currentElement.classList.add('map__pin--active');
+      pinElement.addEventListener('click', function (evt) {
+        var activePin = mapPins.querySelector('.map__pin--active');
+        if (activePin) {
+          activePin.classList.remove('map__pin--active');
+        }
+        window.card.renderAdvertCard(evt, it);
+        pinElement.classList.add('map__pin--active');
+      });
 
-        });
+      // (function (currentPinData, currentElement) {
+      //   currentElement.addEventListener('click', function (evt) {
+      //     // var activePin = mapPins.querySelector('.map__pin--active');
+      //     // if (activePin) {
+      //     //   activePin.classList.remove('map__pin--active');
+      //     // }
+      //     // window.card.renderAdvertCard(evt, currentPinData);
+      //     currentElement.classList.add('map__pin--active');
 
-      })(it, pinElement);
+      //   });
+
+      // })(it, pinElement);
+
+
+      // (function (currentPinData, currentElement) {
+      //   currentElement.addEventListener('click', function (evt) {
+      //     var activePin = mapPins.querySelector('.map__pin--active');
+      //     if (activePin) {
+      //       activePin.classList.remove('map__pin--active');
+      //     }
+      //     window.card.renderAdvertCard(evt, currentPinData);
+      //     currentElement.classList.add('map__pin--active');
+
+      //   });
+
+      // })(it, pinElement);
 
       fragment.appendChild(pinElement);
     });

@@ -112,7 +112,7 @@
   // };
 
   var removeAdvertElementsDisabled = function (elementsArray) {
-    console.log('reomve', elementsArray)
+
     elementsArray.forEach(function (it) {
       it.removeAttribute('disabled');
     });
@@ -168,6 +168,7 @@
     window.mapControl.map.classList.add('map--faded');
     newAdvert.classList.add('ad-form--disabled');
     window.form.setAdvertElementsDisabled(advertElements);
+    window.form.setAdvertElementsDisabled(window.filters.formElements);
     window.mapControl.showPin([]);
     window.mapControl.mapPinMain.style = 'left:' + DefaultCoordinate.LEFT + ';' + 'top: ' + DefaultCoordinate.TOP + ';';
     titleField.value = '';
