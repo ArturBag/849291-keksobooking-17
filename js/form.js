@@ -8,6 +8,12 @@
     LEFT: '570px',
     TOP: '375px'
   };
+  var PriceSuitability = {
+    'BUNGALO': 0,
+    'FLAT': 1000,
+    'HOUSE': 5000,
+    'PALACE': 10000
+  };
   var newAdvert = document.querySelector('.ad-form');
   var allInputs = newAdvert.querySelectorAll('input, select');
   var advertElements = newAdvert.querySelectorAll('form fieldset, form select');
@@ -85,12 +91,6 @@
   };
 
   var setMinPrice = function () {
-    var PriceSuitability = {
-      'BUNGALO': 0,
-      'FLAT': 1000,
-      'HOUSE': 5000,
-      'PALACE': 10000
-    };
 
     selectType.addEventListener('change', function (evt) {
       priceField.placeholder = PriceSuitability[evt.currentTarget.value.toUpperCase()];
@@ -104,26 +104,12 @@
     });
   };
 
-  // var removeAdvertElementsDisabled = function (elementsArray) {
-  //   for (var i = 0; i < elementsArray.length; i++) {
-  //     var currentElement = elementsArray[i];
-  //     currentElement.removeAttribute('disabled');
-  //   }
-  // };
-
   var removeAdvertElementsDisabled = function (elementsArray) {
 
     elementsArray.forEach(function (it) {
       it.removeAttribute('disabled');
     });
   };
-
-  // var setAdvertElementsDisabled = function (elementsArray) {
-  //   for (var i = 0; i < elementsArray.length; i++) {
-  //     var currentElement = elementsArray[i];
-  //     currentElement.setAttribute('disabled', true);
-  //   }
-  // };
 
   var setAdvertElementsDisabled = function (elementsArray) {
     elementsArray.forEach(function (it) {
