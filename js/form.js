@@ -2,24 +2,26 @@
 
 (function () {
 
-  var ESC_KEYCODE = 27;
+  var MAX_ROOMS_QTY = 100;
+  var MIN_GUESTS_QTY = 0;
   var DefaultCoordinate = {
     LEFT: '570px',
     TOP: '375px'
   };
-  var adForm = document.querySelector('.ad-form');
-  var formElements = adForm.querySelectorAll('form fieldset, form select');
-  var addressField = adForm.querySelector('#address');
-  var selectType = adForm.querySelector('#type');
-  var titleField = adForm.querySelector('#title');
-  var priceField = adForm.querySelector('#price');
-  var timeIn = adForm.querySelector('#timein');
-  var timeOut = adForm.querySelector('#timeout');
-  var rooms = adForm.querySelector('#room_number');
-  var roomsList = adForm.querySelectorAll('#room_number option');
-  var capacity = adForm.querySelector('#capacity');
-  var btnSubmit = adForm.querySelector('.ad-form__submit');
-  var resetBtn = adForm.querySelector('.ad-form__reset');
+  var newAdvert = document.querySelector('.ad-form');
+  var allInputs = newAdvert.querySelectorAll('input, select');
+  var advertElements = newAdvert.querySelectorAll('form fieldset, form select');
+  var addressField = newAdvert.querySelector('#address');
+  var selectType = newAdvert.querySelector('#type');
+  var titleField = newAdvert.querySelector('#title');
+  var priceField = newAdvert.querySelector('#price');
+  var timeIn = newAdvert.querySelector('#timein');
+  var timeOut = newAdvert.querySelector('#timeout');
+  var rooms = newAdvert.querySelector('#room_number');
+  var roomsList = newAdvert.querySelectorAll('#room_number option');
+  var capacity = newAdvert.querySelector('#capacity');
+  var btnSubmit = newAdvert.querySelector('.ad-form__submit');
+  var resetBtn = newAdvert.querySelector('.ad-form__reset');
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
   var successTemplate = document.querySelector('#success').content.querySelector('.success');
   var successResult = false;
@@ -31,7 +33,7 @@
 
     var onEscapePress = function (evt) {
 
-      if (evt.keyCode === ESC_KEYCODE) {
+      if (evt.keyCode === window.util.ESC_KEYCODE) {
         evt.preventDefault();
         window.card.closePopup(node);
         document.removeEventListener('keydown', onEscapePress);
@@ -59,9 +61,15 @@
       reloadButton.removeEventListener('click', onButtonClose);
 
     };
+
+    var onErrorPopupClick = function () {
+      window.card.closePopup(node);
+      document.removeEventListener('click', onErrorPopupClick);
+    };
+
     var onEscapePress = function (evt) {
 
-      if (evt.keyCode === ESC_KEYCODE) {
+      if (evt.keyCode === window.util.ESC_KEYCODE) {
         evt.preventDefault();
         window.card.closePopup(node);
         document.removeEventListener('keydown', onEscapePress);
@@ -72,6 +80,7 @@
     if (errorMessage) {
       reloadButton.addEventListener('click', onButtonClose);
       document.addEventListener('keydown', onEscapePress);
+      document.addEventListener('click', onErrorPopupClick);
     }
   };
 
@@ -95,18 +104,31 @@
     });
   };
 
-  var removeFormElementsDisabled = function (elementsArray) {
-    for (var i = 0; i < elementsArray.length; i++) {
-      var currentElement = elementsArray[i];
-      currentElement.removeAttribute('disabled');
-    }
+  // var removeAdvertElementsDisabled = function (elementsArray) {
+  //   for (var i = 0; i < elementsArray.length; i++) {
+  //     var currentElement = elementsArray[i];
+  //     currentElement.removeAttribute('disabled');
+  //   }
+  // };
+
+  var removeAdvertElementsDisabled = function (elementsArray) {
+    console.log('reomve', elementsArray)
+    elementsArray.forEach(function (it) {
+      it.removeAttribute('disabled');
+    });
   };
 
-  var setFormElementsDisabled = function (elementsArray) {
-    for (var i = 0; i < elementsArray.length; i++) {
-      var currentElement = elementsArray[i];
-      currentElement.setAttribute('disabled', true);
-    }
+  // var setAdvertElementsDisabled = function (elementsArray) {
+  //   for (var i = 0; i < elementsArray.length; i++) {
+  //     var currentElement = elementsArray[i];
+  //     currentElement.setAttribute('disabled', true);
+  //   }
+  // };
+
+  var setAdvertElementsDisabled = function (elementsArray) {
+    elementsArray.forEach(function (it) {
+      it.setAttribute('disabled', true);
+    });
   };
 
   capacity.addEventListener('change', function (evt) {
@@ -120,7 +142,7 @@
   btnSubmit.addEventListener('click', function () {
     var capcityQty = parseInt(capacity.value, 10);
     var roomsQty = parseInt(rooms.value, 10);
-    if (roomsQty < capcityQty || (capcityQty === 0 && roomsQty !== 100) || (capcityQty > 0 && roomsQty === 100)) {
+    if (roomsQty < capcityQty || (capcityQty === MIN_GUESTS_QTY && roomsQty !== MAX_ROOMS_QTY) || (capcityQty > MIN_GUESTS_QTY && roomsQty === MAX_ROOMS_QTY)) {
       rooms.setCustomValidity('Количество комнат не соответствует количеству гостей');
 
     } else {
@@ -129,20 +151,31 @@
 
   });
 
-  adForm.addEventListener('submit', function (evt) {
+  allInputs.forEach(function (it) {
+    it.addEventListener('invalid', function (evt) {
+      evt.target.style = 'outline:2px solid red';
+
+    });
+  });
+
+
+  newAdvert.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.send(onSuccess, onError, new FormData(adForm));
+    window.backend.send(onSuccess, onError, new FormData(newAdvert));
   });
 
   var setFormInactive = function () {
     window.mapControl.map.classList.add('map--faded');
-    adForm.classList.add('ad-form--disabled');
-    window.form.setFormElementsDisabled(formElements);
-    window.mapControl.showPin({});
+    newAdvert.classList.add('ad-form--disabled');
+    window.form.setAdvertElementsDisabled(advertElements);
+    window.mapControl.showPin([]);
     window.mapControl.mapPinMain.style = 'left:' + DefaultCoordinate.LEFT + ';' + 'top: ' + DefaultCoordinate.TOP + ';';
     titleField.value = '';
     priceField.value = '';
     addressField.value = parseInt(DefaultCoordinate.LEFT, 10) + ',' + parseInt(DefaultCoordinate.TOP, 10);
+    allInputs.forEach(function (it) {
+      it.removeAttribute('style');
+    });
   };
 
   resetBtn.addEventListener('click', function (evt) {
@@ -162,7 +195,7 @@
     setFormInactive();
     setSuccessMessage();
     removeActiveCard();
-    window.filters.resetFilters();
+    window.filters.resetForm();
   };
 
   var onError = function (errorMessage) {
@@ -170,17 +203,18 @@
   };
 
   window.form = {
-    adForm: adForm,
-    formElements: formElements,
+    newAdvert: newAdvert,
+    advertElements: advertElements,
     addressField: addressField,
     capacity: capacity,
-    removeFormElementsDisabled: removeFormElementsDisabled,
-    setFormElementsDisabled: setFormElementsDisabled,
+    removeAdvertElementsDisabled: removeAdvertElementsDisabled,
+    setAdvertElementsDisabled: setAdvertElementsDisabled,
     DefaultCoordinate: DefaultCoordinate,
     successResult: successResult,
     removeActiveCard: removeActiveCard
   };
-  window.form.setFormElementsDisabled(formElements);
+  window.form.setAdvertElementsDisabled(advertElements);
+  window.form.setAdvertElementsDisabled(window.filters.formElements);
   setMinPrice();
   setTimeInOut();
 
